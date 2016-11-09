@@ -57,9 +57,7 @@ function testNotebooks() {
     for EXCLUDED_NOTEBOOK in "${EXCLUDE[@]}"; do
         EXCLUDE_ARGS="${EXCLUDE_ARGS} -and -not -name '${EXCLUDED_NOTEBOOK}'"
     done
-    SEARCH_CMD="find ${DIR} -name '*.ipynb'${EXCLUDE_ARGS}"
-    echo "Search command: ${SEARCH_CMD}"
-    for NOTEBOOK in `eval "${SEARCH_CMD}"`; do
+    cat good_notebooks.txt | while read NOTEBOOK; do
         echo "Testing ${NOTEBOOK}"
         jupyter nbconvert --ExecutePreprocessor.enabled=True --ExecutePreprocessor.timeout=300 "${NOTEBOOK}" || FAILED_NOTEBOOKS="${FAILED_NOTEBOOKS}${SEP}${NOTEBOOK}"
         COUNT=$(expr ${COUNT} + 1)
